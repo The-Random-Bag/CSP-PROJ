@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>cardinal cancer</title>
+    <link rel="stylesheet" href="styleFile.css">
+
+</head>
+
+<style>
+    body {background-image: url(rug.png)}
+</style>
+<body>
+<div class="next">Navigate Websites Here!
+    <a href="mainWeb.html" id="mW">The Main Web!</a>
+    <a href="Canvas.html" id="cns">Mysterious Website?</a>
+    <a href="sideWeb1.html" id="sW1">Side Web 1</a>
+    <a href="sideWeb2.html" id="sW2">Side Web 2</a>
+    <a href="sideWeb3.html" id="sW3">Side Web 3</a>
+</div>
+<script>
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        ev.target.appendChild(document.getElementById(data));
+    }
+</script>
+<canvas id="c"></canvas>
+
+<h1 draggable="true" ondragstart="drag(event)" > drag absolutely EVERYTHING. </h1>
+<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<div id="div3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<img src="dodd.png" id="drag1" draggable="true" ondragstart="drag(event)"  width="512" height="512" alt="dodecahedron"> <!-- yeah this is from wikipedia -->
+<div> <p>hi</p></div>
+<div class="module-border-wrap" draggable="true" ondragstart="drag(event)"><h2 class = "module"> drag me drag me young sir</h2></div>
+<div style="page-break-before: always">
+    <pre class="brown" draggable="true" ondragstart="drag(event)" >drag me everywhere you care</pre>
+</div>
+
+<div class="wrapper">
+    <div id="block1">
+    <div class="lepene">
+<div class="peep">
+    <table draggable="true" ondragstart="drag(event)">
+        <tr>
+            <th class="listtext">  Suspendisse interdum consectetur libero id faucibus nisl. </th>
+
+            <th class="listtext"> Iaculis at erat pellentesque adipiscing. </th>
+
+            <th class="listtext"> Purus semper eget duis at tellus at. </th>
+            <th class="listtext">  Dis parturient montes nascetur ridiculus mus mauris vitae ultricies leo. </th>
+
+            <th class="listtext"> Massa enim nec dui nunc mattis enim ut tellus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.</th>
+
+            <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam.
+        </tr>
+        <tr>
+            <th class="listtext"> Iaculis eu non diam phasellus vestibulum lorem. </th>
+
+            <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam. </th>
+
+            <th class="listtext">  Id consectetur purus ut faucibus pulvinar elementum integer enim. </th>
+            <th class="listtext">  Dis parturient montes nascetur ridiculus mus mauris vitae ultricies leo. </th>
+
+            <th class="listtext"> Massa enim nec dui nunc mattis enim ut tellus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.</th>
+
+            <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam.
+        </tr>
+        <tr>
+            <th class="listtext">  Dis parturient montes nascetur ridiculus mus mauris vitae ultricies leo. </th>
+
+            <th class="listtext"> Massa enim nec dui nunc mattis enim ut tellus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.</th>
+
+            <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam.
+            <th class="listtext">  Dis parturient montes nascetur ridiculus mus mauris vitae ultricies leo. </th>
+
+        <th class="listtext"> Massa enim nec dui nunc mattis enim ut tellus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.</th>
+
+        <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam.
+    </tr>
+    <tr>
+        <th class="listtext">  Suspendisse interdum consectetur libero id faucibus nisl. </th>
+
+        <th class="listtext"> Iaculis at erat pellentesque adipiscing. </th>
+
+        <th class="listtext"> Purus semper eget duis at tellus at. </th>
+        <th class="listtext"> Iaculis eu non diam phasellus vestibulum lorem. </th>
+
+        <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam. </th>
+
+        <th class="listtext">  Id consectetur purus ut faucibus pulvinar elementum integer enim. </th>
+    </tr>
+    <tr>
+        <th class="listtext"> Iaculis eu non diam phasellus vestibulum lorem. </th>
+
+        <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam. </th>
+
+        <th class="listtext">  Id consectetur purus ut faucibus pulvinar elementum integer enim. </th>
+        <th class="listtext"> Iaculis eu non diam phasellus vestibulum lorem. </th>
+
+        <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam. </th>
+
+        <th class="listtext">  Id consectetur purus ut faucibus pulvinar elementum integer enim. </th>
+    </tr>
+    <tr>
+        <th class="listtext">  Dis parturient montes nascetur ridiculus mus mauris vitae ultricies leo. </th>
+
+        <th class="listtext"> Massa enim nec dui nunc mattis enim ut tellus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.</th>
+
+        <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam.
+        <th class="listtext">  Dis parturient montes nascetur ridiculus mus mauris vitae ultricies leo. </th>
+
+        <th class="listtext"> Massa enim nec dui nunc mattis enim ut tellus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.</th>
+
+        <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam.
+    </tr>
+
+
+
+
+
+
+</table>
+</div>
+</div>
+    </div>
+    <div id="block2">
+<div class="lepene">
+    <div class="peep" id = "tableshift">
+        <table draggable="true" ondragstart="drag(event)" >
+            <tr>
+                <th class="listtext">  Suspendisse interdum consectetur libero id faucibus nisl. </th>
+
+                <th class="listtext"> Iaculis at erat pellentesque adipiscing. </th>
+
+                <th class="listtext"> Purus semper eget duis at tellus at. </th>
+            </tr>
+            <tr>
+                <th class="listtext"> Iaculis eu non diam phasellus vestibulum lorem. </th>
+
+                <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam. </th>
+
+                <th class="listtext">  Id consectetur purus ut faucibus pulvinar elementum integer enim. </th>
+            </tr>
+            <tr>
+                <th class="listtext">  Dis parturient montes nascetur ridiculus mus mauris vitae ultricies leo. </th>
+
+                <th class="listtext"> Massa enim nec dui nunc mattis enim ut tellus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.</th>
+
+                <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam.
+            </tr>
+            <tr>
+                <th class="listtext">  Suspendisse interdum consectetur libero id faucibus nisl. </th>
+
+                <th class="listtext"> Iaculis at erat pellentesque adipiscing. </th>
+
+                <th class="listtext"> Purus semper eget duis at tellus at. </th>
+            </tr>
+            <tr>
+                <th class="listtext"> Iaculis eu non diam phasellus vestibulum lorem. </th>
+
+                <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam. </th>
+
+                <th class="listtext">  Id consectetur purus ut faucibus pulvinar elementum integer enim. </th>
+            </tr>
+            <tr>
+                <th class="listtext">  Dis parturient montes nascetur ridiculus mus mauris vitae ultricies leo. </th>
+
+                <th class="listtext"> Massa enim nec dui nunc mattis enim ut tellus. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.</th>
+
+                <th class="listtext"> Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam.
+            </tr>
+
+
+
+
+
+
+        </table>
+    </div>
+</div>
+</div>
+</div>
+
+</body>
+
+</html>

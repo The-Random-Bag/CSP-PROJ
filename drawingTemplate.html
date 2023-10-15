@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+</head>
+<body>
+
+<canvas id="imageView" width="1500" height="600"></canvas>
+<script type="text/javascript">
+    const canvaso = document.getElementById('imageView');
+    let context = canvaso.getContext('2d');
+    context.lineWidth = 5;
+    const gradient = context.createConicGradient(0, 595, 302);
+    gradient.addColorStop(0, "red");
+    gradient.addColorStop(0.25, "orange");
+    gradient.addColorStop(0.5, "yellow");
+    gradient.addColorStop(0.75, "green");
+    gradient.addColorStop(1, "blue");
+
+    context.strokeStyle = gradient;
+    context.save();
+    context.translate(233.5, 140.5);
+    context.scale(1, 0.3548387096774194);
+    context.beginPath();
+    context.arc(0, 0, 99, 0, 6.283185307179586, false);
+    context.stroke();
+    context.closePath();
+    context.restore();
+
+    context.strokeStyle = gradient;
+    context.save();
+    context.translate(273, 152);
+    context.scale(0.7454545454545455, 1);
+    context.beginPath();
+    context.arc(0, 0, 137, 0, 6.283185307179586, false);
+    context.stroke();
+    context.closePath();
+    context.restore();
+
+    context.strokeStyle = gradient;
+    context.save();
+    context.translate(220.5, 329);
+    context.scale(0.4805194805194805, 1);
+    context.beginPath();
+    context.arc(0, 0, 85, 0, 6.283185307179586, false);
+    context.stroke();
+    context.closePath();
+    context.restore();
+
+    context.strokeStyle = gradient;
+    context.save();
+    context.translate(330, 355);
+    context.scale(0.5633802816901409, 1);
+    context.beginPath();
+    context.arc(0, 0, 81, 0, 6.283185307179586, false);
+    context.stroke();
+    context.closePath();
+    context.restore();
+
+    context.strokeStyle = gradient;
+    context.save();
+    context.translate(108, 150);
+    context.scale(0.4805194805194805, 1);
+    context.beginPath();
+    context.arc(0, 0, 100, 0, 6.283185307179586, false);
+    context.stroke();
+    context.closePath();
+    context.restore();
+
+    context.strokeStyle = gradient;
+    context.save();
+    context.translate(520, 185);
+    context.scale(0.4805194805194805, 1);
+    context.beginPath();
+    context.arc(0, 0, 100, 0, 6.283185307179586, false);
+    context.stroke();
+    context.closePath();
+    context.restore();
+
+    context.strokeStyle = gradient;
+    context.strokeRect(348, 75, 90, 210);
+
+    context.strokeStyle = gradient;
+    context.save();
+    context.translate(755, 278);
+    context.scale(1, 0.3);
+    context.beginPath();
+    context.arc(0, 0, 100, 0, 6.283185307179586, false);
+    context.stroke();
+    context.closePath();
+    context.restore();
+
+    context.strokeStyle = gradient;
+    context.save();
+    context.translate(834, 250);
+    context.scale(1, 1);
+    context.beginPath();
+    context.arc(0, 0, 100, 0, 6.283185307179586, false);
+    context.stroke();
+    context.closePath();
+    context.restore();
+
+    context.strokeStyle = gradient;
+    context.save();
+    context.translate(832, 210);
+    context.scale(0.1, 0.1);
+    context.beginPath();
+    context.arc(0, 0, 100, 0, 6.283185307179586, false);
+    context.fillStyle = gradient;
+    context.stroke();
+    context.closePath();
+    context.restore();
+
+    context.strokeStyle = gradient;
+    context.save();
+    context.translate(728, 210);
+    context.scale(0.1, 0.1);
+    context.beginPath();
+    context.arc(0, 0, 100, 0, 6.283185307179586, false);
+    context.fillStyle = gradient;
+    context.stroke();
+    context.closePath();
+    context.restore();
+
+    context.strokeStyle = gradient;
+    context.save();
+    context.translate(700, 279);
+    context.scale(0.05, 0.05);
+    context.beginPath();
+    context.arc(0, 0, 100, 0, 6.283185307179586, false);
+    context.fillStyle = gradient;
+    context.stroke();
+    context.closePath();
+    context.restore();
+
+    context.strokeStyle = gradient;
+    context.save();
+    context.translate(780, 279);
+    context.scale(0.05, 0.05);
+    context.beginPath();
+    context.arc(0, 0, 100, 0, 6.283185307179586, false);
+    context.fillStyle = gradient;
+    context.stroke();
+    context.closePath();
+    context.restore();
+
+    context.strokeStyle = gradient;
+    context.save();
+    context.translate(853, 469);
+    context.scale(2, 1);
+    context.beginPath();
+    context.arc(0, 0, 100, 0, 6.283185307179586, false);
+    context.closePath();
+    context.lineWidth = 5;
+    context.fillStyle = gradient;
+    
+    context.stroke();
+
+
+
+    function rect(x1,y1,x2,y2,v1,v2,w1,w2) {
+        context.restore();
+        context.fillStyle = gradient;
+        context.fillRect(714+x1, 574+y1, 100+x2, 200+y2)
+        context.fillRect(923+v1, 574+w1, 100+v2, 200+w2)
+    }
+
+    rect(200,20,200,20, 200,20,200,20)
+    context.restore();
+    context.fillStyle = gradient;
+    context.fillRect(714, 574, 100, 200);
+    context.fillRect(923, 574, 100, 200);
+
+    context.beginPath();
+    context.moveTo(734, 55);
+    context.bezierCurveTo(1164, 32, 907, 268, 1340, 168);
+    context.stroke();
+    context.save();
+    context.translate(-500, 500)
+    context.beginPath();
+    context.moveTo(734, 55);
+    context.bezierCurveTo(1164, 32, 907, 268, 1340, 168);
+    context.restore();
+    context.stroke();
+
+
+
+
+
+
+    //Most of the code for the cursor location is below. IMPORTANT: You also need to have the additional <p id="coordinateValues"> tag in your html at the top.
+    let xCoord = 0
+    let yCoord = 0
+    function getCursorPosition(canvas, event) {
+        const rect = canvas.getBoundingClientRect()
+        xCoord = event.clientX - rect.left
+        yCoord = event.clientY - rect.top
+        document.getElementById("coordinateValues").innerHTML = "Coordinates - x: "+xCoord+", y: "+yCoord
+    }
+
+    canvaso.addEventListener('mousemove', function(e) { getCursorPosition(canvaso, e)})
+</script>
+<p id="coordinateValues">Coordinates - x: 0, y: 0</p>
+</body>
+</html>

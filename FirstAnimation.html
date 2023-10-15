@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <canvas id="canvas" width="500px" height="500px" style="border: 1px solid black;" tabindex="1" autofocus></canvas>
+    <p id="coordinateValues">Coordinates - x: 0, y: 0</p>
+    <script>
+        //Canvas API: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+        const canvas = document.getElementById("canvas")
+        const ctx = canvas.getContext("2d")
+        let xPos = 50; //50 px
+        let yPos = 50; //100 px
+        let trigger = false;
+        let shX = 0;
+        let shY = 0;
+        let iterator = 0
+      //  let xVel = 60; //60px/sec
+
+        let prevTimeStamp = 0
+        window.requestAnimationFrame(gameLoop)
+        function gameLoop(currentTimeStamp) {
+
+            let timeElapsed = (currentTimeStamp - prevTimeStamp) / 1000
+            prevTimeStamp = currentTimeStamp
+            ctx.fillStyle = "white"
+            if (xPos >= 500) {
+                trigger = true;
+            }
+            if (xPos === 0) {
+                trigger = false;
+            }
+            if (iterator >= 1000) {
+                trigger = false;
+                iterator = 0;
+            }
+            if (trigger === true && iterator < 1000) {
+                xPos = xPos/1.01;
+                yPos = yPos/1.01;
+                shX = xPos;
+                shY = yPos-50;
+                ctx.clearRect(0, 0, 500, 500);
+                ctx.fillStyle = "red";
+                ctx.fillRect(0,0, xPos, yPos);
+
+                ctx.fillRect(0,0, shX, shY);
+                iterator++;
+
+            } else if (trigger === false) {
+                xPos++;
+                yPos++;
+                console.log(xPos)
+                console.log(yPos)
+                ctx.fillStyle = "blue";
+                ctx.fillRect(0,0, xPos, yPos);
+            }
+
+
+
+            window.requestAnimationFrame(gameLoop)
+        }
+
+
+
+
+
+
+        //Mouse Input Stuff
+        let xCoord = 0
+        let yCoord = 0
+        function getCursorPosition(canvas, event) {
+            const rect = canvas.getBoundingClientRect()
+            xCoord = event.clientX - rect.left
+            yCoord = event.clientY - rect.top
+            document.getElementById("coordinateValues").innerHTML = "Coordinates - x: "+xCoord+", y: "+yCoord
+        }
+
+        canvas.addEventListener('mousemove', function(e) { getCursorPosition(canvas, e)})
+
+        addEventListener('click', (event) => {});
+
+        onclick = (event) => { }
+
+    </script>
+</head>
+<body></body>
+</html>

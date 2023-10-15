@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <canvas id="canvas" width="500px" height="500px" style="border: 1px solid black;" tabindex="1" autofocus></canvas>
+    <p id="coordinateValues">Coordinates - x: 0, y: 0</p>
+    <script>
+        //Canvas API: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+        const canvas = document.getElementById("canvas")
+        const ctx = canvas.getContext("2d")
+        let xPos = 50; //50 px
+        let yPos = 50; //100 px
+        let xHit = false;
+        let yHit = false;
+        let db = false;
+        let xDrive;
+        let yDrive;
+        let startingMove = (Math.floor(Math.random() * 4) + 1);
+        function xRand() {
+        xDrive = (Math.floor(Math.random() * 35) + 1)/100 + 1;
+        }
+        function yRand() {
+        yDrive = (Math.floor(Math.random() * 35) + 1)/100 + 1;
+        }
+        yRand();
+        xRand();
+        let prevTimeStamp = 0
+        window.requestAnimationFrame(gameLoop)
+        function gameLoop(currentTimeStamp) {
+
+            let timeElapsed = (currentTimeStamp - prevTimeStamp) / 1000;
+            prevTimeStamp = currentTimeStamp;
+            function rightup() {
+            xPos = xPos+xDrive;
+            yPos = yPos+yDrive;
+            ctx.clearRect(0,0,500,500);
+            ctx.fillRect(xPos, yPos, 200, 100);
+            }
+            function rightdown() {
+            xPos = xPos+xDrive;
+            yPos = yPos-yDrive;
+            ctx.clearRect(0,0,500,500);
+            ctx.fillRect(xPos, yPos, 200, 100);
+            }
+            function leftup() {
+            xPos = xPos-xDrive;
+            yPos = yPos+yDrive;
+            ctx.clearRect(0,0,500,500);
+            ctx.fillRect(xPos, yPos, 200, 100);
+            }
+            function leftdown() {
+            xPos = xPos-xDrive;
+            yPos = yPos-yDrive;
+            ctx.clearRect(0,0,500,500);
+            ctx.fillRect(xPos, yPos, 200, 100);
+            }
+
+
+            if (xPos <= 0) {
+
+            }
+            if (xPos <= 200) {
+
+            }
+            if (yPos >= 400) {
+
+            }
+            if (yPos <= 0) {
+
+            }
+
+
+
+            window.requestAnimationFrame(gameLoop)
+        }
+
+
+        function pickColor(){
+            r = Math.random() * (254 - 0) + 0;
+          g = Math.random() * (254 - 0) + 0;
+         b = Math.random() * (254 - 0) + 0;
+
+    logoColor = 'rgb('+r+','+g+', '+b+')';
+}
+
+
+
+        //Mouse Input Stuff
+        let xCoord = 0
+        let yCoord = 0
+        function getCursorPosition(canvas, event) {
+            const rect = canvas.getBoundingClientRect()
+            xCoord = event.clientX - rect.left
+            yCoord = event.clientY - rect.top
+            document.getElementById("coordinateValues").innerHTML = "Coordinates - x: "+xCoord+", y: "+yCoord
+        }
+
+        canvas.addEventListener('mousemove', function(e) { getCursorPosition(canvas, e)})
+
+        addEventListener('click', (event) => {});
+
+        onclick = (event) => { }
+
+    </script>
+</head>
+<body></body>
+</html>

@@ -1,0 +1,8 @@
+head {background-color: yellow}
+h2 {color: blue}
+body {background-color: orange}
+#pant {
+    display: grid;
+    grid-template-columns: 10px 30% 40% auto 20px 100px;
+    grid-template-rows: 20px 15% 20% auto 40px 200px;
+}

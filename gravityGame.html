@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ouoiuouou the pull</title>
+
+</head>
+<body>
+
+<canvas id="canvas" width="1000px" height="700px" style="border: 1px solid black;" tabindex="1" autofocus></canvas>
+<input id="clickMe" onclick="doFunction();" type="button" value="click me whipeee"/>
+<script>
+  const canvas = document.getElementById("canvas")
+  const ctx = canvas.getContext("2d")
+  let img1 = document.createElement("img");
+  img1.src = "download.jpg"
+  let diminish = false
+  let dx = 0;
+  let dy = 0;
+  let angle = 0;
+  let bouletArray = []
+  let set = false;
+  let iterator = 0;
+  let animator;
+  let broken = false;
+  let stopped = false;
+  window.requestAnimationFrame(gameLoop)
+  let moon = {
+    xPos: 200,
+    yPos: 200,
+    radius: 30,
+    xVel: 0,
+    yVel: 0,
+    destructiveIndex: 0
+  }
+  let planet = {
+    xPos: 600,
+    yPos: 250,
+    radius: 80,
+    xVel: 0.01,
+    yVel: 0.01,
+    destructiveIndex: 0
+  }
+
+  ctx.fillStyle = "blue"
+  function gameLoop() {
+    ctx.beginPath()
+    ctx.clearRect(0,0,canvas.width,canvas.height)
+    arch(moon)
+    moon.destructiveIndex = Math.abs(moon.radius * moon.xVel * moon.yVel)
+    console.log(moon.destructiveIndex)
+    if (broken === false) {
+      arch(planet)
+    }
+
+    ctx.fill()
+    ctx.closePath()
+
+    velocityAppend(planet)
+    velocityAppend(moon)
+    if (set === false) {
+      bound(planet)
+    }
+    bound(moon)
+    if (trig === true) {
+      trig = false
+      s1 = xCoord
+      s2 = yCoord
+    }
+    if (isCircleInCircle(moon, planet)) {
+      planet.xVel = moon.xVel
+      planet.yVel = moon.yVel
+      moon.xVel *= -0.3
+      moon.yVel *= -0.3
+
+      if(moon.destructiveIndex > 750) {
+
+        set = true
+      }
+
+    }
+    if (iterator > 100 || bouletArray.length > 100) {
+      bouletArray = []
+      console.log("reset")
+      stopped = true
+      iterator = 0
+      planet = {
+        xPos: -10000,
+        yPos: -10000,
+        radius: 0,
+        xVel: 0,
+        yVel: 0,
+      }
+      broken = true
+    }
+
+
+    if (set === true) {
+      //velocityAppend(bouletArray[0])
+      shatter(planet)
+      if (planet.radius > 0) {
+        planet.radius -= 1
+        planet.xVel += 2
+      }
+      while (bouletArray.length > 200 && bouletArray[iterator] !== null) {
+        shatter(planet)
+        iterator += 1
+
+      }
+    }
+    if (diminish === true) {
+      if (moon.xVel > 0) {
+        moon.xVel -= 0.01
+      }
+      if (moon.yVel > 0) {
+        moon.yVel -= 0.01
+      }
+    }
+
+    gravitationalPull(moon, planet)
+
+    window.requestAnimationFrame(gameLoop)
+  }
+
+  const delta = 6;
+  let startX;
+  let startY;
+  let trig;
+  let s1;
+  let s2;
+  let xCoord = 0;
+  let yCoord= 0;
+  let xDiff = 0;
+  let yDiff = 0;
+
+  canvas.addEventListener('mousedown', function (event) {
+    startX = event.pageX;
+    startY = event.pageY;
+    trig = true
+  });
+
+  canvas.addEventListener('mouseup', function (event) {
+    const diffX = Math.abs(event.pageX - startX);
+    const diffY = Math.abs(event.pageY - startY);
+    xDiff = s1-xCoord
+    yDiff = s2-yCoord
+    if (diffX < delta && diffY < delta) {
+      console.log("click?")
+    } else {
+      /*      ctx.beginPath()
+            ctx.moveTo(s1, s2)
+            ctx.lineTo(xCoord, yCoord)
+            ctx.stroke()
+            ctx.closePath() */
+      diminish = true
+      moon.xVel = xDiff/10
+      moon.yVel = yDiff/10
+
+    }
+  });
+  function arch(circle) {
+    ctx.arc(circle.xPos, circle.yPos, circle.radius, 0, 2*Math.PI)
+
+  }
+  function angleReception(xPosSup, yPosSup, xPosInf, yPosInf) {
+    dx = xPosSup - xPosInf;
+    dy = yPosSup - yPosInf;
+    angle = Math.atan2(dy, dx)
+  }
+  function getCursorPosition(canvas, event) {
+    const rect = canvas.getBoundingClientRect()
+    xCoord = event.clientX - rect.left
+    yCoord = event.clientY - rect.top
+  }
+  function isCircleInCircle(circle1, circle2){
+    return Math.sqrt(Math.pow(circle1.xPos - circle2.xPos, 2 ) + Math.pow(circle1.yPos - circle2.yPos, 2)) < circle1.radius+circle2.radius
+  }
+  function gravitationalPull(inferior, superior) {
+    let collectiveIndexInferior = Math.pow(inferior.radius, 2) * Math.PI
+    let collectiveIndexSuperior = Math.pow(superior.radius, 2) * Math.PI
+    let comparativeIndex = collectiveIndexSuperior/collectiveIndexInferior
+    let effectiveGravity = comparativeIndex*(Math.abs(inferior.xVel/50))
+
+    let superiorBoundLowG = {
+      xPos: superior.xPos,
+      yPos: superior.yPos,
+      radius: superior.radius*2.75
+    }
+    let superiorBoundHighG = {
+      xPos: superior.xPos,
+      yPos: superior.yPos,
+      radius: superior.radius*1.5
+    }
+    if (isCircleInCircle(inferior, superiorBoundLowG)) {
+      angleReception(superior.xPos, superior.yPos, inferior.xPos, inferior.yPos )
+      inferior.xPos += Math.cos(angle) * inferior.xVel*effectiveGravity/6;
+      inferior.yPos += Math.sin(angle) * inferior.yVel*effectiveGravity/6;
+    }
+    if (isCircleInCircle(inferior, superiorBoundHighG)) {
+      angleReception(superior.xPos, superior.yPos, inferior.xPos, inferior.yPos )
+      inferior.xPos += Math.cos(angle) * inferior.xVel*effectiveGravity/2;
+      inferior.yPos += Math.sin(angle) * inferior.yVel*effectiveGravity/2;
+    }
+    //console.log((Math.atan2(inferior.xPos, superior.yPos)*180)/Math.PI)
+
+  }
+  function shatter(targetPlanet) {
+    let borbol = {
+      leftBound: targetPlanet.xPos-targetPlanet.radius,
+      rightBound: targetPlanet.xPos+targetPlanet.radius,
+      upperBound: targetPlanet.yPos-targetPlanet.radius,
+      lowerBound: targetPlanet.yPos+targetPlanet.radius,
+    }
+    let genPlant = {
+      xPos: (Math.floor(Math.random() * borbol.rightBound) + borbol.leftBound),
+      yPos: (Math.floor(Math.random() * borbol.lowerBound) + borbol.upperBound),
+      radius: Math.sqrt((((Math.PI*Math.pow(targetPlanet.radius, 2))/500)/Math.PI)),
+      xVel: (Math.floor(Math.random() * 4) + -4),
+      yVel: (Math.floor(Math.random() * 4) + -4),
+      update() {
+        this.xPos += this.xVel;
+        this.yPos += this.yVel;
+      },
+      const: animator = () => {
+      bouletArray.forEach(element => {
+        ctx.beginPath()
+        element.update();
+        arch(element);
+        console.log(element)
+        ctx.fill()
+        ctx.closePath()
+      })
+      }
+    }
+    if (stopped === false) {
+      bouletArray.push(genPlant)
+    }
+    console.log(genPlant)
+    animator()
+  }
+  function velocityAppend(target) {
+    target.xPos += target.xVel
+    target.yPos += target.yVel
+  }
+  function doFunction() {
+    planet = {
+      x: Math.random() * 1499,
+      y: Math.random() * 1499,
+      radius: Math.random() * 199,
+      xVel: Math.random() * .3,
+      yVel: Math.random() * .3,
+    }
+  }
+  function bound(body) {
+    if (body.xPos+body.radius >= canvas.width) {
+      body.xPos= canvas.width-body.radius
+      body.xVel *= -0.3
+    }
+    if (body.xPos-body.radius <= 0) {
+      body.xPos=0+body.radius
+      body.xVel *= -0.3
+    }
+    if (body.yPos+body.radius >= canvas.height) {
+      body.yPos= canvas.height-body.radius
+      body.yVel *= -0.3
+    }
+    if (body.yPos-body.radius <= 0) {
+      body.yPos=0+body.radius
+      body.yVel *= -0.3
+    }
+  }
+  canvas.addEventListener('mousemove', function(e) { getCursorPosition(canvas, e)})
+</script>
+</body>
+</html>

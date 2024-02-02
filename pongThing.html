@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>lonmg long pong pong ueghch</title>
+</head>
+<body>
+<canvas id="canvas" width="500px" height="500px" style="border: 1px solid black;" tabindex="1" autofocus></canvas>
+<p id="coordinateValues">Coordinates - x: 0, y: 0</p>
+    <script>
+        //Canvas API: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+        const canvas = document.getElementById("canvas")
+        const ctx = canvas.getContext("2d")
+        let scoreL = 0
+        let scoreR = 0
+
+        let rect = {
+            xPos: 450,
+            yPos: 250,
+            width: 5,
+            height: 5,
+            xVel: 5,
+            yVel: 5,
+            xInertia: 10,
+        }
+        let rect2 = {
+            xPos: 20,
+            yPos: 250,
+            width: 5,
+            height: 5,
+            yPred: 0,
+            xPred: 0,
+            xSlope: 0,
+            luh: false,
+            triggy: false,
+        }
+        let sphere = {
+            x: 100,
+            y: 100,
+            r: 40,
+            sAngle: 0,
+            eAngle: Math.PI*2,
+            gravity: 1.1,
+            otherIncrement: 5,
+            left: false,
+            up: false,
+        }
+        function move() {
+            if (sphere.left === false) {
+                sphere.x += sphere.otherIncrement
+            } else {
+                sphere.x -= sphere.otherIncrement
+            }
+            if (sphere.up === false) {
+                sphere.y += sphere.otherIncrement
+            } else {
+                sphere.y -= sphere.otherIncrement
+            }
+            if (isPointInCircle(rect.xPos, rect.yPos, sphere)) {
+                sphere.left = true
+            }
+        }
+        function reset() {
+            sphere.y = 250
+            sphere.x = 250
+            rect2.yPred = 250
+            rect2.xPred = 250
+        }
+        function calculatePath() {
+            if (sphere.x < 50) {
+            rect2.yPos = sphere.y
+            }
+        }
+        let prevTimeStamp = 0
+        window.requestAnimationFrame(gameLoop)
+        function gameLoop(currentTimeStamp) {
+            //let timeElapsed = (currentTimeStamp - prevTimeStamp) / 1000
+            prevTimeStamp = currentTimeStamp
+            ctx.clearRect(0, 0, 500, 500)
+
+            if(kbInput.left.isPressedUL){
+                rect.xPos -= rect.xVel
+            }
+
+            if(kbInput.left.isPressedUL && isPointInCircle(rect.xPos, rect.yPos, sphere)) {
+                sphere.otherIncrement = rect.xInertia
+            }
+
+            if(!kbInput.left.isPressedUL){
+                sphere.otherIncrement = 5
+            }
+            if(kbInput.right.isPressedDR){
+                rect.xPos += rect.xVel
+            }
+
+            if(kbInput.up.isPressedUL){
+                rect.yPos -= rect.yVel
+            }
+            if(kbInput.down.isPressedDR){
+                rect.yPos += rect.yVel
+            }
+            ctx.fillText(scoreL, 131, 104)
+            ctx.fillText(scoreR, 305, 104)
+            ctx.fillRect(rect.xPos, rect.yPos, rect.width, rect.height)
+            ctx.fillRect(rect2.xPos, rect2.yPos, rect2.width, rect2.height)
+            ctx.beginPath()
+            ctx.arc(sphere.x, sphere.y, sphere.r, sphere.sAngle, sphere.eAngle)
+            ctx.fill()
+            ctx.closePath()
+            move()
+            calculatePath()
+            if (rect.xPos >= 490 - rect.width) {
+                rect.xPos -= 5
+            } else if (rect.xPos <= 400) {
+                rect.xPos += 5
+            }
+            if (rect.yPos >= 500 - rect.height) {
+                rect.yPos -= 5
+            } else if (rect.yPos <= 0) {
+                rect.yPos += 5
+            }
+            if (sphere.y+sphere.r >= 500) {
+                sphere.up = true
+            } else if (sphere.y+sphere.r <= 0) {
+                sphere.up = false
+            }
+            if (sphere.x>= 500) {
+                scoreR += 1
+
+                reset()
+            } else if (sphere.x <= 0) {
+                scoreL += 1
+
+                reset()
+            }
+            if (isPointInCircle(rect2.xPos, rect2.yPos, sphere)) {
+                sphere.left = false
+            }
+
+
+            window.requestAnimationFrame(gameLoop)
+        }
+
+        function isPointInCircle(xPoint, yPoint, circle){
+            return Math.sqrt(Math.pow(circle.x - xPoint, 2) + Math.pow(circle.y - yPoint, 2)) < circle.r;
+        }
+
+        function isCircleInCircle(circle1, circle2){
+            let distanceBetweenCircles = Math.sqrt(Math.pow(circle1.xPos - circle2.xPos, 2 ) + Math.pow(circle1.yPos - circle2.yPos, 2))
+            return distanceBetweenCircles <= circle1.radius + circle2.radius;
+        }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        // Keyboard Input
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        canvas.addEventListener('keydown', keyHandler)
+        canvas.addEventListener('keyup', keyHandler)
+
+        let kbInput = {
+            left : {
+                value : "ArrowLeft",
+                isPressedUL: false,
+            },
+            right : {
+                value : "ArrowRight",
+                isPressedDR: false,
+            },
+            down : {
+                value : "ArrowDown",
+                isPressedDR: false,
+            },
+            up : {
+                value : "ArrowUp",
+                isPressedUL: false,
+            },
+        }
+
+        function keyHandler(event) {
+            event.preventDefault() //prevents the keys that you press from performing their default action in your internet browser (for ex: when you press the down arrow key, the browser window will not scroll down)
+            let type = event.type
+            let isPressedDR = false
+            let isPressedUL = false
+            if(type==="keydown"){
+                isPressedDR = true
+                isPressedUL = true
+            }else if(type==="keyup"){
+                isPressedDR = false
+                isPressedUL = false
+            }
+            if(event.key===kbInput.left.value){
+                kbInput.left.isPressedUL = isPressedUL
+            }
+            if(event.key===kbInput.right.value){
+                kbInput.right.isPressedDR = isPressedDR
+            }
+            if(event.key===kbInput.up.value){
+                kbInput.up.isPressedUL = isPressedUL
+            }
+            if(event.key===kbInput.down.value){
+                kbInput.down.isPressedDR = isPressedDR
+            }
+        }
+        function enumeration(number) {
+            if (number === 0) {
+                ctx.beginPath()
+                ctx.strokeStyle = '#000000';
+                ctx.strokeRect(375, 46, 4, 137);
+                ctx.strokeRect(374, 46, 52, 4);
+                ctx.strokeRect(423, 50, 3, 129);
+                ctx.strokeRect(381, 179, 42, 3);
+                ctx.closePath()
+            }
+            if (number === 1) {
+                ctx.beginPath()
+                context.strokeStyle = '#000000';
+                context.strokeRect(441, 60, 3, 136);
+                context.strokeRect(420, 61, 18, 5);
+                context.strokeRect(411, 188, 66, 4);
+                ctx.closePath()
+            }
+        }
+        //Mouse Input Stuff
+        let xCoord = 0
+        let yCoord = 0
+        function getCursorPosition(canvas, event) {
+            const rect = canvas.getBoundingClientRect()
+            xCoord = event.clientX - rect.left
+            yCoord = event.clientY - rect.top
+            document.getElementById("coordinateValues").innerHTML = "Coordinates - x: "+xCoord+", y: "+yCoord
+        }
+
+        canvas.addEventListener('mousemove', function(e) { getCursorPosition(canvas, e)})
+
+        addEventListener('click', (event) => {});
+
+        onclick = (event) => { }
+
+    </script>
+
+</body>
+</html>

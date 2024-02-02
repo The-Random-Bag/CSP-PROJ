@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>leep</title>
+
+
+    </head>
+<body>
+<canvas id="canvas" width="500px" height="500px" style="border: 1px solid black;" tabindex="1" autofocus></canvas>
+<p id="coordinateValues">Coordinates - x: 0, y: 0</p>
+    <script>
+        let logoColor;
+            function pickColor() {
+        r = Math.random() * (254);
+        g = Math.random() * (254);
+        b = Math.random() * (254);
+
+        logoColor = 'rgb(' + r + ',' + g + ', ' + b + ')';
+    }
+        let argoSenic = false;
+        let xCoord = 0;
+        let yCoord = 0;
+        let mocky = 0;
+        let mockx = 0;
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        let score = 0;
+
+        let lollipopTop = {
+            xPos: 300,
+            yPos: 250,
+            radius: 50,
+        }
+
+    let circle = {
+        angle : Math.PI,
+        angle2 : 3/2*Math.PI,
+        velocity : Math.PI/80,
+
+    
+        position : [
+        {x : xCoord+250, y : yCoord+350, r : 15},
+        ],
+    
+        draw : function(){    
+            ctx.beginPath();
+            ctx.fillStyle = this.position[0].c;
+            ctx.arc(this.position[0].x, this.position[0].y, this.position[0].r, 0, 2*Math.PI);
+            ctx.fill();
+            ctx.closePath();
+        
+            ctx.beginPath();
+            ctx.lineWidth = 5;
+            ctx.arc(this.position.x, this.position.y, this.position.r, 3/2*Math.PI, this.angle2);
+            ctx.stroke();
+            ctx.closePath();
+        },
+        update : function(){
+            this.angle -= this.velocity;
+            this.angle2 += this.velocity;
+        
+            if(this.angle2 >= 2*Math.PI){
+                this.angle2 = 0;
+
+        }
+        this.position[0].x = xCoord + this.position[0].r * Math.sin(this.angle);
+        this.position[0].y = yCoord + this.position[0].r * Math.cos(this.angle);
+        mockx = this.position[0].x;
+        mocky = this.position[0].y;
+    }
+}
+
+        function move() {
+            if (xCoord>= lollipopTop.xPos && yCoord>=lollipopTop.yPos) {
+                lollipopTop.xPos-=3;
+                lollipopTop.yPos-=3;
+            } else if (xCoord< lollipopTop.xPos && yCoord>=lollipopTop.yPos) {
+                lollipopTop.xPos+=3;
+                lollipopTop.yPos-=3
+            } else if (xCoord>= lollipopTop.xPos && yCoord<lollipopTop.yPos) {
+                lollipopTop.xPos+=3;
+                lollipopTop.yPos+=3;
+            } else if (xCoord< lollipopTop.xPos && yCoord<lollipopTop.yPos) {
+                lollipopTop.xPos-=3;
+                lollipopTop.yPos+=3;
+            }
+        }
+
+        let prevTimeStamp = 0
+        function pleh() {
+            ctx.font = "50px serif";
+            ctx.fillText(score, 400, 100);
+        }
+        function cluck() {
+            lollipopTop.xPos = Math.floor(Math.random() * 500 - lollipopTop.radius)+lollipopTop.radius;
+            lollipopTop.yPos = Math.floor(Math.random() * 500 - lollipopTop.radius)+lollipopTop.radius;
+        }
+        window.requestAnimationFrame(gameLoop)
+        function gameLoop(currentTimeStamp) {
+            let timeElapsed = (currentTimeStamp - prevTimeStamp) / 1000
+            prevTimeStamp = currentTimeStamp
+            ctx.clearRect(0, 0, 500, 500)
+            pleh();
+            //if (argoSenic === false) {
+            //    cluck();
+            //}
+
+            //Ball x/yCoord tracking
+            if(isPointInCircle(xCoord, yCoord, lollipopTop)){
+                ctx.fillStyle = logoColor;
+                score += 1;
+                pleh();
+                cluck();
+                argoSenic = false;
+            }
+            if(isCircleInCircle(lollipopTop, mockx, mocky)){
+                ctx.fillStyle = logoColor;
+                pickColor();
+                argoSenic = true;
+                console.log("uecghhh")
+            }
+            if(isPointInCircle && isCircleInCircle) {
+                move();
+                if (lollipopTop.xPos < 20) {
+                    lollipopTop.xPos = 500;
+                } else if (lollipopTop.xPos>480) {
+                    lollipopTop.xPos = 0
+                }
+                if (lollipopTop.yPos > 500) {
+                    lollipopTop.yPos = 0;
+                } else if (lollipopTop.yPos < 20) {
+                    lollipopTop.yPos = 500;
+                }
+            }
+            circle.draw();
+            circle.update();
+            drawCircle(lollipopTop);
+
+            if (score >= 30) {
+                ctx.font = "65px serif";
+                ctx.fillText("You figured it out!", 0, 250);
+                
+            }
+
+            window.requestAnimationFrame(gameLoop)
+        }
+
+        function drawCircle(circle){
+            ctx.beginPath()
+            ctx.arc(circle.xPos, circle.yPos, circle.radius, 0, Math.PI*2)
+            ctx.fill()
+            ctx.closePath()
+        }
+
+        function isPointInCircle(xPoint, yPoint, circle){
+            return Math.sqrt(Math.pow(circle.xPos - xPoint, 2) + Math.pow(circle.yPos - yPoint, 2)) < circle.radius;
+        }
+        function isCircleInCircle(fcurcke, x, y){
+            return Math.sqrt(Math.pow(fcurcke.xPos - x, 2) + Math.pow(fcurcke.yPos - y, 2)) < fcurcke.radius+15;
+        }
+
+
+
+
+        //Mouse Input Stuff
+
+        function getCursorPosition(canvas, event) {
+            const rect = canvas.getBoundingClientRect()
+            xCoord = event.clientX - rect.left
+            yCoord = event.clientY - rect.top
+            document.getElementById("coordinateValues").innerHTML = "Coordinates - x: "+xCoord+", y: "+yCoord
+        }
+
+        canvas.addEventListener('mousemove', function(e) { getCursorPosition(canvas, e)})
+
+        addEventListener('click', (event) => {});
+
+        onclick = (event) => { }
+
+    </script>
+
+</body>
+</html>

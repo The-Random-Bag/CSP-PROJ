@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>leep</title>
+
+
+    </head>
+<body>
+<canvas id="canvas" width="500px" height="500px" style="border: 1px solid black;" tabindex="1" autofocus></canvas>
+<p id="coordinateValues">Coordinates - x: 0, y: 0</p>
+    <script>
+        //Canvas API: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+        const canvas = document.getElementById("canvas")
+        const ctx = canvas.getContext("2d")
+        let score = 0;
+
+        let lollipopTop = {
+            xPos: 300,
+            yPos: 250,
+            radius: 50,
+        }
+
+        let gumball = {
+            xPos: 100,
+            yPos: 150,
+            angle: Math.PI,
+            angle2: 3/2*Math.PI,
+            radius: 25,
+            velocity: Math.PI/80,
+            position : [ {x : canvas.width/2, y: canvas.height/2 - 150, radius: 30}],
+            index: 1,
+            draw : function () {
+                ctx.beginPath();
+                ctx.arc(this.position[0].xPos, this.position[0].yPos, this.position[0].radius, 0, 2*Math.PI)
+                ctx.fill()
+                ctx.closePath();
+
+            },
+            update : function() {
+                this.angle -= this.velocity;
+                this.angle2 += this.velocity;
+                this.position[0].xPos = canvas.width/2 + this.position[this.index].radius * Math.sin(this.angle);
+                this.position[0].yPos = canvas.height/2 + this.position[this.index].radius * Math.cos(this.angle);
+            }
+        }
+  //      let angle = 0;
+
+        let prevTimeStamp = 0
+        function pleh() {
+            ctx.font = "50px serif";
+            ctx.fillText(score, 400, 100);
+        }
+        function cluck() {
+            lollipopTop.xPos = Math.floor(Math.random() * 500 - lollipopTop.radius)+lollipopTop.radius;
+            lollipopTop.yPos = Math.floor(Math.random() * 500 - lollipopTop.radius)+lollipopTop.radius;
+        }
+        window.requestAnimationFrame(gameLoop)
+        function gameLoop(currentTimeStamp) {
+            let timeElapsed = (currentTimeStamp - prevTimeStamp) / 1000
+            prevTimeStamp = currentTimeStamp
+            ctx.clearRect(0, 0, 500, 500)
+            pleh();
+
+            //Ball x/yCoord tracking
+            if(isPointInCircle(xCoord, yCoord, lollipopTop)){
+                cluck();
+                score += 1;
+                pleh();
+                console.log(lollipopTop.xPos)
+            }
+
+
+
+
+/*
+            if(isPointInCircle(xCoord, yCoord, gumball)){ //this is equivalent to saying: isPointInCircle(xCoord, yCoord, lollipopTop)===true
+                ctx.fillStyle = "blue"
+            }else{
+                ctx.fillStyle = "green"
+            }
+            */
+            if(isCircleInCircle(lollipopTop, gumball)){
+                ctx.fillStyle = "blue"
+            }else{
+                ctx.fillStyle = "green"
+            }
+            function rhombus() {
+
+            }
+
+
+            drawCircle(gumball)
+            gumball.draw()
+            gumball.update()
+
+                /*
+                angle = Math.atan2(yCoord - gumball.radius / 2, xCoord - gumball.radius / 2);
+                ctx.translate(gumball.radius / 2, gumball.radius / 2);
+                gumball.xPos = gumball.radius*angle
+                gumball.yPos = gumball.radius*angle
+                ctx.translate(-gumball.radius/2, -gumball.radius/2)
+    */
+
+            /*
+                =
+                ^used only for assigning a value to a variable
+
+                ==
+                ^used to check for equality without caring about the data type.
+                    for example:
+                        let var1 = 1
+                        let var2 = "1"
+                        var1==var2
+                        ^^this statement would be true
+                ===
+                ^used to check for equality where it cares about the data type
+                        var1===var2
+                        ^^ this statement would be false
+
+             */
+
+
+
+
+
+
+
+
+
+
+
+            window.requestAnimationFrame(gameLoop)
+        }
+
+        function drawCircle(circle){
+            ctx.beginPath()
+            ctx.arc(circle.xPos, circle.yPos, circle.radius, 0, Math.PI*2)
+            ctx.fill()
+            ctx.closePath()
+        }
+
+        function isPointInCircle(xPoint, yPoint, circle){
+            return Math.sqrt(Math.pow(circle.xPos - xPoint, 2) + Math.pow(circle.yPos - yPoint, 2)) < circle.radius;
+        }
+        function isCircleInCircle(circle, circle2){
+            return Math.sqrt(Math.pow(circle.xPos - circle2.xPos, 2) + Math.pow(circle.yPos - circle2.yPos, 2)) < circle.radius+circle2.radius;
+        }
+
+
+
+
+        //Mouse Input Stuff
+        let xCoord = 0
+        let yCoord = 0
+        function getCursorPosition(canvas, event) {
+            const rect = canvas.getBoundingClientRect()
+            xCoord = event.clientX - rect.left
+            yCoord = event.clientY - rect.top
+            document.getElementById("coordinateValues").innerHTML = "Coordinates - x: "+xCoord+", y: "+yCoord
+        }
+
+        canvas.addEventListener('mousemove', function(e) { getCursorPosition(canvas, e)})
+
+        addEventListener('click', (event) => {});
+
+        onclick = (event) => { }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <canvas id="canvas" width="500px" height="500px" style="border: 1px solid black;" tabindex="1" autofocus></canvas>
+    <p id="coordinateValues">Coordinates - x: 0, y: 0</p>
+    <script>
+        //Canvas API: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+        const canvas = document.getElementById("canvas")
+        const ctx = canvas.getContext("2d")
+
+        let box1 = {
+            xPos: 250,
+            yPos: 250,
+            width: 20,
+            height: 100,
+        }
+
+        let box2 = {
+            xPos: 250,
+            yPos: 250,
+            width: 40,
+            height: 10,
+        }
+        let circle = {
+            xPos: 100,
+            yPos: 100,
+            radius: 25,
+        }
+
+
+        let prevTimeStamp = 0
+        window.requestAnimationFrame(gameLoop)
+        function gameLoop(currentTimeStamp) {
+            let timeElapsed = (currentTimeStamp - prevTimeStamp) / 1000
+            prevTimeStamp = currentTimeStamp
+            ctx.clearRect(0, 0, 500, 500)
+
+            box1.xPos = xCoord
+            box1.yPos = yCoord
+
+
+            ctx.fillRect(box1.xPos, box1.yPos, box1.width, box1.height)
+            drawCircle(circle)
+            ctx.fillRect(box2.xPos, box2.yPos, box2.width, box2.height)
+            if(ifCircleInRectangle(box1, circle)){
+                ctx.fillStyle = "green"
+                print("eugh")
+            }else{
+                ctx.fillStyle = "black"
+                print("bleh")
+            }
+            if(isRectangleInRectangle(box1, box2)){
+                ctx.fillStyle = "red"
+            }else{
+                ctx.fillStyle = "black"
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+            window.requestAnimationFrame(gameLoop)
+        }
+        function ifCircleInRectangle(rect, circle) {
+            return circle.radius+rect.width<circle.xPos+rect.xPos;
+            print("wah")
+        }
+        function drawCircle(circle){
+            ctx.beginPath()
+            ctx.arc(circle.xPos, circle.yPos, circle.radius, 0, Math.PI*2)
+            ctx.fill()
+            ctx.closePath()
+        }
+
+        function isPointInCircle(xPoint, yPoint, circle){
+            return Math.sqrt(Math.pow(circle.xPos - xPoint, 2) + Math.pow(circle.yPos - yPoint, 2)) < circle.radius;
+        }
+
+        function isCircleInCircle(circle1, circle2){
+            let distanceBetweenCircles = Math.sqrt(Math.pow(circle1.xPos - circle2.xPos, 2 ) + Math.pow(circle1.yPos - circle2.yPos, 2))
+            return distanceBetweenCircles <= circle1.radius + circle2.radius;
+        }
+
+        function isRectangleInRectangle(rect1, rect2){
+            let rect1LeftEdge = rect1.xPos
+            let rect1RightEdge = rect1.xPos + rect1.width
+            let rect1TopEdge = rect1.yPos
+            let rect1BottomEdge = rect1.yPos + rect1.height
+            let rect2LeftEdge = rect2.xPos
+            let rect2RightEdge = rect2.xPos + rect2.width
+            let rect2TopEdge = rect2.yPos
+            let rect2BottomEdge = rect2.yPos + rect2.height
+            return rect2RightEdge > rect1LeftEdge && rect2LeftEdge < rect1RightEdge && rect2BottomEdge > rect1TopEdge && rect2TopEdge < rect1BottomEdge;
+        }
+
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        // Keyboard Input
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        canvas.addEventListener('keydown', keyHandler)
+        canvas.addEventListener('keyup', keyHandler)
+
+        let kbInput = {
+            left : {
+                value : "ArrowLeft",
+                isPressed: false,
+            },
+            right : {
+                value : "ArrowRight",
+                isPressed: false,
+            },
+            down : {
+                value : "ArrowDown",
+                isPressed: false,
+            },
+            up : {
+                value : "ArrowUp",
+                isPressed: false,
+            },
+        }
+
+        function keyHandler(event) {
+            event.preventDefault() //prevents the keys that you press from performing their default action in your internet browser (for ex: when you press the down arrow key, the browser window will not scroll down)
+            let type = event.type
+            let isPressed = false
+            if(type==="keydown"){
+                isPressed = true
+            }
+            if(event.key===kbInput.left.value){
+                kbInput.left.isPressed = isPressed
+            }
+            if(event.key===kbInput.right.value){
+                kbInput.right.isPressed = isPressed
+            }
+            if(event.key===kbInput.up.value){
+                kbInput.up.isPressed = isPressed
+            }
+            if(event.key===kbInput.down.value){
+                kbInput.down.isPressed = isPressed
+            }
+        }
+
+        //Mouse Input Stuff
+        let xCoord = 0
+        let yCoord = 0
+        function getCursorPosition(canvas, event) {
+            const rect = canvas.getBoundingClientRect()
+            xCoord = event.clientX - rect.left
+            yCoord = event.clientY - rect.top
+            document.getElementById("coordinateValues").innerHTML = "Coordinates - x: "+xCoord+", y: "+yCoord
+        }
+
+        canvas.addEventListener('mousemove', function(e) { getCursorPosition(canvas, e)})
+
+        addEventListener('click', (event) => {});
+
+        onclick = (event) => { }
+
+    </script>
+</head>
+<body></body>
+</html>

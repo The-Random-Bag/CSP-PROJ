@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="canvas" width="500px" height="500px" style="border: 1px solid black;" tabindex="1" autofocus></canvas>
+<p id="coordinateValues">Coordinates - x: 0, y: 0</p>
+    <script>
+        //Canvas API: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+        const canvas = document.getElementById("canvas")
+        const ctx = canvas.getContext("2d")
+
+        let rect = {
+            xPos: 250,
+            yPos: 250,
+            width: 20,
+            height: 100,
+            xVel: 5,
+            yVel: 5,
+        }
+        let sphere = {
+            x: 100,
+            y: 100,
+            r: 40,
+            sAngle: 0,
+            eAngle: Math.PI*2,
+            gravity: 1.1,
+            otherincre: 5,
+            slill: false,
+        }
+        function gravity() {
+
+            if (sphere.y >= 480-sphere.r) {
+                sphere.y -= sphere.otherincre
+                console.log(sphere.y)
+                sphere.slill = true
+            } else {
+                sphere.y *= sphere.gravity
+                sphere.slill = false
+            }
+            if (sphere.slill === true) {
+                sphere.otherincre += 0.1
+            } else {
+                sphere.otherincre = 5
+            }
+        }
+        let img1 = document.createElement("img");
+        img1.src = "troll.png";
+        let prevTimeStamp = 0
+        window.requestAnimationFrame(gameLoop)
+        function gameLoop(currentTimeStamp) {
+            //let timeElapsed = (currentTimeStamp - prevTimeStamp) / 1000
+            prevTimeStamp = currentTimeStamp
+            ctx.clearRect(0, 0, 500, 500)
+
+            ctx.drawImage(img1, 0, 200)
+            if(kbInput.left.isPressedUL){
+                rect.xPos -= rect.xVel
+            }
+            if(kbInput.right.isPressedDR){
+                rect.xPos += rect.xVel
+            }
+
+            if(kbInput.up.isPressedUL){
+                rect.yPos -= rect.yVel
+            }
+            if(kbInput.down.isPressedDR){
+                rect.yPos += rect.yVel
+            }
+            console.log(rect.xPos, rect.xVel, rect.yVel)
+            ctx.fillRect(rect.xPos, rect.yPos, rect.width, rect.height)
+            ctx.beginPath()
+            ctx.arc(sphere.x, sphere.y, sphere.r, sphere.sAngle, 2*Math.PI)
+            ctx.fill()
+            ctx.closePath()
+            gravity()
+
+            if (rect.xPos >= 500 - rect.width) {
+                rect.xPos -= 5
+            } else if (rect.xPos <= 0) {
+                rect.xPos += 5
+            }
+            if (rect.yPos >= 500 - rect.height) {
+                rect.yPos -= 5
+            } else if (rect.yPos <= 0) {
+                rect.yPos += 5
+            }
+
+            //ctx.clearRect(0, 0, rect.xPos, 500+(rect.height+rect.yPos))
+            window.requestAnimationFrame(gameLoop)
+        }
+
+        function drawCircle(circle){
+            ctx.beginPath()
+            ctx.arc(circle.xPos, circle.yPos, circle.radius, 0, Math.PI*2)
+            ctx.fill()
+            ctx.closePath()
+        }
+
+        function isPointInCircle(xPoint, yPoint, circle){
+            return Math.sqrt(Math.pow(circle.xPos - xPoint, 2) + Math.pow(circle.yPos - yPoint, 2)) < circle.radius;
+        }
+
+        function isCircleInCircle(circle1, circle2){
+            let distanceBetweenCircles = Math.sqrt(Math.pow(circle1.xPos - circle2.xPos, 2 ) + Math.pow(circle1.yPos - circle2.yPos, 2))
+            return distanceBetweenCircles <= circle1.radius + circle2.radius;
+        }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        // Keyboard Input
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        canvas.addEventListener('keydown', keyHandler)
+        canvas.addEventListener('keyup', keyHandler)
+
+        let kbInput = {
+            left : {
+                value : "ArrowLeft",
+                isPressedUL: false,
+            },
+            right : {
+                value : "ArrowRight",
+                isPressedDR: false,
+            },
+            down : {
+                value : "ArrowDown",
+                isPressedDR: false,
+            },
+            up : {
+                value : "ArrowUp",
+                isPressedUL: false,
+            },
+        }
+
+        function keyHandler(event) {
+            event.preventDefault() //prevents the keys that you press from performing their default action in your internet browser (for ex: when you press the down arrow key, the browser window will not scroll down)
+            let type = event.type
+            let isPressedDR = false
+            let isPressedUL = false
+            if(type==="keydown"){
+                isPressedDR = true
+                isPressedUL = true
+            }else if(type==="keyup"){
+                isPressedDR = false
+                isPressedUL = false
+            }
+            if(event.key===kbInput.left.value){
+                kbInput.left.isPressedUL = isPressedUL
+            }
+            if(event.key===kbInput.right.value){
+                kbInput.right.isPressedDR = isPressedDR
+            }
+            if(event.key===kbInput.up.value){
+                kbInput.up.isPressedUL = isPressedUL
+            }
+            if(event.key===kbInput.down.value){
+                kbInput.down.isPressedDR = isPressedDR
+            }
+        }
+
+        //Mouse Input Stuff
+        let xCoord = 0
+        let yCoord = 0
+        function getCursorPosition(canvas, event) {
+            const rect = canvas.getBoundingClientRect()
+            xCoord = event.clientX - rect.left
+            yCoord = event.clientY - rect.top
+            document.getElementById("coordinateValues").innerHTML = "Coordinates - x: "+xCoord+", y: "+yCoord
+        }
+
+        canvas.addEventListener('mousemove', function(e) { getCursorPosition(canvas, e)})
+
+        addEventListener('click', (event) => {});
+
+        onclick = (event) => { }
+
+    </script>
+
+</body>
+</html>

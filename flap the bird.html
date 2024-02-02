@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hop hop hop like a bnuiyy</title>
+</head>
+<body>
+<canvas id="canvas" width="1000px" height="700px" style="border: 1px solid black;" tabindex="1" autofocus></canvas>
+<script>
+  const canvas = document.getElementById("canvas")
+  const ctx = canvas.getContext("2d")
+  let img1 = document.createElement("img");
+  img1.src = "download.jpg";
+  let isPressed;
+  let failure = false;
+  let newLine = 3;
+  let timeElapsed;
+  let isReallyPressed = false;
+  let points = -1;
+  let gap = 300;
+  let peathy = 1;
+  window.requestAnimationFrame(gameLoop)
+  let bird = {
+    xPos: 50,
+    yPos: 20,
+    width: 56,
+    height: 56, //yPos 500+56
+    yCurve: 1.025,
+    drag: false,
+    switch: false,
+  }
+  let gen1 = {
+      xPos: 450,
+      yPos: 0,
+      width: 150,
+      height: 0,
+  }
+  let gen2 = {
+      xPos: 450,
+      yPos: 0,
+      width: 150,
+      height: 0,
+  }
+  let gen3 = {
+      xPos: 1000,
+      yPos: 0,
+      width: 150,
+      height: 0,
+  }
+  let gen4 = {
+      xPos: 1000,
+      yPos: 0,
+      width: 150,
+      height: 0,
+  }
+  pipeDetermination(gen1, gen2)
+  let prevTimeStamp = 0
+  window.requestAnimationFrame(gameLoop)
+  function gameLoop(currentTimeStamp) {
+    timeElapsed = (currentTimeStamp - prevTimeStamp) / 1000
+    //prevTimeStamp = currentTimeStamp
+      if (failure === false) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height)
+      } else {
+          gen1.yPos = 10000
+          gen2.yPos = 10000
+          gen3.yPos = 10000
+          gen4.yPos = 10000
+          ctx.font = "50px serif"
+          ctx.fillStyle = "black"
+          ctx.fillRect(0,0,canvas.width,canvas.height)
+          ctx.fillStyle = "white"
+          ctx.fillText(points, 250, 250)
+      }
+    if (collisionTrue(bird, gen1) || collisionTrue(bird, gen2) || collisionTrue(bird, gen3) || collisionTrue(bird, gen4)) {
+        failure= true
+    }
+    asWeMoveOn(gen1)
+    asWeMoveOn(gen2)
+    asWeMoveOn(gen3)
+    asWeMoveOn(gen4)
+      if (gen1.xPos < 350 && gen1.xPos > 340 && failure === false) {
+          gen3.xPos = 1000
+          gen4.xPos = 1000
+          pipeDetermination(gen3, gen4)
+          points += 0.5
+      }
+      if (gen3.xPos < 350 && gen3.xPos > 340 && failure === false) {
+          gen1.xPos = 1000
+          gen2.xPos = 1000
+          pipeDetermination(gen1, gen2)
+          points += 0.2
+      }
+    RectRep(bird)
+    RectRep(gen1)
+    RectRep(gen2)
+    RectRep(gen3)
+    RectRep(gen4)
+    ctx.font = "25px serif"
+      if (failure === false) {
+          ctx.fillText(points, 750, 250)
+      }
+    if (kbInput.up.isPressed) {
+        isReallyPressed = true
+    }
+      if (kbInput.down.isPressed) {
+          slam()
+      }
+    if (kbInput.space.isPressed) {
+        location.reload()
+    }
+    if (kbInput.up.isPressed && kbInput.shift.isPressed) {
+        bird.drag = true
+        bird.yPos -= 5
+        console.log("wuh")
+    }
+
+    if (isReallyPressed === true) {
+        isReallyPressed=false;
+        bird.drag=true;
+        bird.switch=true;
+    }
+    if (bird.switch === true) {
+        bird.switch = false
+        newLine = 3
+        bird.yCurve = 1
+    }
+
+      gravity(bird.yCurve)
+      console.log(bird.drag, bird.switch)
+      if (bird.yPos > 700) {
+        loss()
+      }
+    window.requestAnimationFrame(gameLoop)
+  }
+
+  canvas.addEventListener('keydown', keyHandler)
+  canvas.addEventListener('keyup', keyHandler)
+
+  function keyHandler(event) {
+      event.preventDefault()
+      let type = event.type
+      if(type==="keydown"){
+          isPressed = true
+      }else if(type==="keyup"){
+          isPressed = false
+      }
+      if(event.key===kbInput.up.value){
+          kbInput.up.isPressed = isPressed
+      }
+      if(event.key===kbInput.down.value){
+          kbInput.down.isPressed = isPressed
+      }
+      if(event.code===kbInput.space.value){
+          kbInput.space.isPressed = isPressed
+      }
+      if(event.key===kbInput.shift.value){
+          kbInput.shift.isPressed = isPressed
+      }
+  }
+  let kbInput = {
+      up: {
+          value: "ArrowUp",
+          isPressed: false,
+      },
+      down: {
+          value: "ArrowDown",
+          isPressed: false,
+      },
+      space: {
+          value: "Space",
+          isPressed: false,
+      },
+      shift: {
+          value: "Shift",
+          isPressed: false,
+      }
+  }
+function gravity(increment) {
+    if (bird.drag === false) {
+        if (bird.yCurve < 1) {
+            bird.yCurve = 1.025
+        }
+        newLine *= increment
+        bird.yPos += newLine
+    }
+    if (bird.drag === true) {
+        bird.yCurve-=0.01
+        newLine *= increment
+        if (newLine < 0.4) {
+            bird.drag = false
+        }
+        bird.yPos -= newLine
+    }
+}
+function pipeDetermination(rect1, rect2) {
+    rect1.height = (Math.floor(Math.random() * 700-gap) + 1);
+    rect1.yPos = 0
+    rect2.yPos = rect1.height+gap
+    rect2.height = 700-gap
+    gap-=1
+}
+function collisionTrue(rect1, rect2) {
+    let rect1LeftEdge = rect1.xPos
+    let rect1RightEdge = rect1.xPos + rect1.width
+    let rect1TopEdge = rect1.yPos
+    let rect1BottomEdge = rect1.yPos + rect1.height
+    let rect2LeftEdge = rect2.xPos
+    let rect2RightEdge = rect2.xPos + rect2.width
+    let rect2TopEdge = rect2.yPos
+    let rect2BottomEdge = rect2.yPos + rect2.height
+    return rect2RightEdge > rect1LeftEdge && rect2LeftEdge < rect1RightEdge && rect2BottomEdge > rect1TopEdge && rect2TopEdge < rect1BottomEdge;
+}
+function RectRep(drawist) {
+    ctx.fillRect(drawist.xPos, drawist.yPos, drawist.width, drawist.height)
+}
+function asWeMoveOn(gen) {
+    gen.xPos -= peathy
+    peathy += 0.001
+}
+function loss() {
+failure = true
+}
+function slam() {
+    bird.drag = false
+    bird.yCurve = 1.05
+}
+</script>
+</body>
+</html>
